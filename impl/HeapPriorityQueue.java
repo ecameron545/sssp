@@ -130,9 +130,15 @@ public class HeapPriorityQueue<E> extends Heap<E> implements PriorityQueue<E> {
      * @param x The item to insert.
      */
     public void insert(E x) {
-        if (isFull()) throw new FullContainerException();
-         throw new UnsupportedOperationException();
-        //assert isHeap();
+    	if (isFull())
+			throw new FullContainerException();
+
+		// Put x in the last next unused position in internal.
+		// Then call raiseKeyAt to make sure the heap is correct.
+		internal[heapSize] = x;
+		raiseKeyAt(heapSize++);
+
+		assert isHeap();
     }
 
     /**
@@ -149,9 +155,18 @@ public class HeapPriorityQueue<E> extends Heap<E> implements PriorityQueue<E> {
      * @return The maximum element.
      */
     public E extractMax() {
-
-
-         throw new UnsupportedOperationException();
+    	if (internal[0] == null)
+			return null;
+    	
+		// Save the first position in the heap
+    	E ret = internal[0];
+		// Put the last item in the heap into the first position
+    	swap(0, (heapSize-1));
+    	// Decrease the heap size to take out the last item in the heap
+    	heapSize--;
+		// Call sinkKeyAt to make sure the heap is correct
+    	sinkKeyAt(0);
+		return ret;
     }
 
     /**
