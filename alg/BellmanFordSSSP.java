@@ -33,26 +33,23 @@ public class BellmanFordSSSP implements SSSP {
 			parents[i] = -1;
 		}
 
-		/*
-		 * parents[source] = 0; 
-		 * distanceBounds[source] = 0;
-		 */
+		distanceBounds[source] = 0;
+		// parents[source] = source;
 
 		// repeat the algorithm V-1 times
 		for (int j = 0; j < g.numVertices(); j++) {
 			// loop through the vertices
-			for (int i = source; i < distanceBounds.length; i++) {
+			for (int v = 0; v < distanceBounds.length; v++) {
 				// loop through the adjacents of the current vertex
-				for (int adj : g.adjacents(i)) {
+				for (int adj : g.adjacents(v)) {
 
-					if (distanceBounds[adj] < g.weight(adj, i) + distanceBounds[i]) {
-						distanceBounds[adj] = g.weight(adj, i) + distanceBounds[i];
-						parents[adj] = i;
-					} else if (distanceBounds[adj] == Double.POSITIVE_INFINITY) {
-						distanceBounds[adj] = g.weight(adj, i) + distanceBounds[i];
-						parents[adj] = i;
+					// distance from the source to the current vertex
+					double weight = distanceBounds[v] + g.weight(v, adj);
+
+					if (distanceBounds[adj] > weight) {
+						distanceBounds[adj] = weight;
+						parents[adj] = v;
 					}
-
 				}
 			}
 		}
